@@ -16,7 +16,7 @@ class PhoneViewController: UIViewController {
     let nextButton = PointButton(title: "다음")
     let descriptionLabel = UILabel()
     
-    let vaildText = Observable.just("10자 이상, 숫자만 적어주세요")
+    let validText = Observable.just("10자 이상, 숫자만 적어주세요")
     let commonNumber = Observable.just("010")
     let disposeBag = DisposeBag()
     
@@ -37,7 +37,7 @@ class PhoneViewController: UIViewController {
             }
             .disposed(by: disposeBag)
         
-        vaildText
+        validText
             .bind(to: descriptionLabel.rx.text)
             .disposed(by: disposeBag)
         
