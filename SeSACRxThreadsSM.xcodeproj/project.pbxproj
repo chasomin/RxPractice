@@ -28,6 +28,7 @@
 		041280712AEFAD3D00972552 /* PhoneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041280702AEFAD3D00972552 /* PhoneViewController.swift */; };
 		041280732AEFAD4B00972552 /* NicknameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041280722AEFAD4B00972552 /* NicknameViewController.swift */; };
 		041280782AF1D14000972552 /* Resource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041280772AF1D14000972552 /* Resource.swift */; };
+		7905796C2BB88FAF00EAD2D1 /* SampleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7905796B2BB88FAF00EAD2D1 /* SampleViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -70,6 +71,7 @@
 		041280702AEFAD3D00972552 /* PhoneViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneViewController.swift; sourceTree = "<group>"; };
 		041280722AEFAD4B00972552 /* NicknameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NicknameViewController.swift; sourceTree = "<group>"; };
 		041280772AF1D14000972552 /* Resource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Resource.swift; sourceTree = "<group>"; };
+		7905796B2BB88FAF00EAD2D1 /* SampleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -123,6 +125,7 @@
 		041280222AEF9BAB00972552 /* SeSACRxThreads */ = {
 			isa = PBXGroup;
 			children = (
+				7905796A2BB88FA100EAD2D1 /* Sample */,
 				041280532AEF9C1F00972552 /* SignUp */,
 				041280542AEF9C2600972552 /* SignIn */,
 				0412806D2AEFAD0F00972552 /* SignUpOptional */,
@@ -190,6 +193,14 @@
 				041280722AEFAD4B00972552 /* NicknameViewController.swift */,
 			);
 			path = SignUpOptional;
+			sourceTree = "<group>";
+		};
+		7905796A2BB88FA100EAD2D1 /* Sample */ = {
+			isa = PBXGroup;
+			children = (
+				7905796B2BB88FAF00EAD2D1 /* SampleViewController.swift */,
+			);
+			path = Sample;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -276,7 +287,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 0412801B2AEF9BAB00972552 /* Build configuration list for PBXProject "SeSACRxThreads" */;
+			buildConfigurationList = 0412801B2AEF9BAB00972552 /* Build configuration list for PBXProject "SeSACRxThreadsSM" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -337,6 +348,7 @@
 				0412806C2AEFABFE00972552 /* PasswordViewController.swift in Sources */,
 				041280562AEFA04800972552 /* SignInViewController.swift in Sources */,
 				041280282AEF9BAB00972552 /* ViewController.swift in Sources */,
+				7905796C2BB88FAF00EAD2D1 /* SampleViewController.swift in Sources */,
 				041280632AEFA0CE00972552 /* PointButton.swift in Sources */,
 				041280242AEF9BAB00972552 /* AppDelegate.swift in Sources */,
 				041280732AEFAD4B00972552 /* NicknameViewController.swift in Sources */,
@@ -645,7 +657,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		0412801B2AEF9BAB00972552 /* Build configuration list for PBXProject "SeSACRxThreads" */ = {
+		0412801B2AEF9BAB00972552 /* Build configuration list for PBXProject "SeSACRxThreadsSM" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				041280482AEF9BAC00972552 /* Debug */,

@@ -6,24 +6,74 @@
 //
 
 import UIKit
+import SnapKit
+import RxSwift
+import RxCocoa
 
-class SampleViewController: UIViewController {
+final class SampleViewController: UIViewController {
+    private let tableView = UITableView()
+    private let okButton = UIButton()
+    private let textField = UITextField()
+    
+    private var items = BehaviorSubject(value: ["item1"])
+    private let disposeBag = DisposeBag()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        configureView()
+        bind()
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    private func bind() {
+        okButton.rx.tap
+            .bind(with: self) { owner, _ in
+                var currentItems = try! owner.items.value()
+                currentItems.append(owner.textField.text!)
+                owner.items.onNext(currentItems)
+            }
+            .disposed(by: disposeBag)
+        
+        items
+            .bind(to: tableView.rx.items) { (tableView, row, element) in
+                let cell = tableView.dequeueReusableCell(withIdentifier: "Cell")!
+                cell.textLabel?.text = "\(element) @ row \(row)"
+                return cell
+            }
+            .disposed(by: disposeBag)
+        
+        tableView.rx.itemSelected
+            .bind(with: self) { owner, indexpath in
+                var currentItems = try! owner.items.value()
+                currentItems.remove(at: indexpath.row)
+                owner.items.onNext(currentItems)
+            }
+            .disposed(by: disposeBag)
+            
     }
-    */
+
+    private func configureView() {
+        view.backgroundColor = .white
+        view.addSubview(textField)
+        view.addSubview(okButton)
+        view.addSubview(tableView)
+        textField.snp.makeConstraints { make in
+            make.top.leading.equalTo(view.safeAreaLayoutGuide).inset(10)
+        }
+        okButton.snp.makeConstraints { make in
+            make.top.bottom.equalTo(textField)
+            make.leading.equalTo(textField.snp.trailing)
+            make.trailing.equalTo(view.safeAreaLayoutGuide).inset(10)
+        }
+        tableView.snp.makeConstraints { make in
+            make.top.equalTo(textField.snp.bottom)
+            make.horizontalEdges.bottom.equalTo(view.safeAreaLayoutGuide)
+        }
+        
+        textField.borderStyle = .roundedRect
+        textField.placeholder = "textfield"
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
+        okButton.setTitle("추가", for: .normal)
+        okButton.setTitleColor(.black, for: .normal)
+    }
 
 }
