@@ -31,6 +31,8 @@
 		7905796C2BB88FAF00EAD2D1 /* SampleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7905796B2BB88FAF00EAD2D1 /* SampleViewController.swift */; };
 		790579752BBADEA700EAD2D1 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790579732BBADEA700EAD2D1 /* SearchViewController.swift */; };
 		790579762BBADEA700EAD2D1 /* SearchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790579742BBADEA700EAD2D1 /* SearchTableViewCell.swift */; };
+		790579792BBAEB3000EAD2D1 /* ShoppingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790579782BBAEB3000EAD2D1 /* ShoppingViewController.swift */; };
+		7905797B2BBAEC5500EAD2D1 /* ShoppingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7905797A2BBAEC5500EAD2D1 /* ShoppingTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -76,6 +78,8 @@
 		7905796B2BB88FAF00EAD2D1 /* SampleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleViewController.swift; sourceTree = "<group>"; };
 		790579732BBADEA700EAD2D1 /* SearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		790579742BBADEA700EAD2D1 /* SearchTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchTableViewCell.swift; sourceTree = "<group>"; };
+		790579782BBAEB3000EAD2D1 /* ShoppingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingViewController.swift; sourceTree = "<group>"; };
+		7905797A2BBAEC5500EAD2D1 /* ShoppingTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -129,6 +133,7 @@
 		041280222AEF9BAB00972552 /* SeSACRxThreads */ = {
 			isa = PBXGroup;
 			children = (
+				790579772BBAEB1E00EAD2D1 /* ShoppingList */,
 				790579722BBADE9700EAD2D1 /* Search */,
 				7905796A2BB88FA100EAD2D1 /* Sample */,
 				041280532AEF9C1F00972552 /* SignUp */,
@@ -215,6 +220,15 @@
 				790579742BBADEA700EAD2D1 /* SearchTableViewCell.swift */,
 			);
 			path = Search;
+			sourceTree = "<group>";
+		};
+		790579772BBAEB1E00EAD2D1 /* ShoppingList */ = {
+			isa = PBXGroup;
+			children = (
+				790579782BBAEB3000EAD2D1 /* ShoppingViewController.swift */,
+				7905797A2BBAEC5500EAD2D1 /* ShoppingTableViewCell.swift */,
+			);
+			path = ShoppingList;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -362,12 +376,14 @@
 				041280652AEFA2F000972552 /* SignTextField.swift in Sources */,
 				0412806C2AEFABFE00972552 /* PasswordViewController.swift in Sources */,
 				041280562AEFA04800972552 /* SignInViewController.swift in Sources */,
+				790579792BBAEB3000EAD2D1 /* ShoppingViewController.swift in Sources */,
 				041280282AEF9BAB00972552 /* ViewController.swift in Sources */,
 				7905796C2BB88FAF00EAD2D1 /* SampleViewController.swift in Sources */,
 				041280632AEFA0CE00972552 /* PointButton.swift in Sources */,
 				041280242AEF9BAB00972552 /* AppDelegate.swift in Sources */,
 				041280732AEFAD4B00972552 /* NicknameViewController.swift in Sources */,
 				0412806A2AEFA91E00972552 /* SignUpViewController.swift in Sources */,
+				7905797B2BBAEC5500EAD2D1 /* ShoppingTableViewCell.swift in Sources */,
 				041280712AEFAD3D00972552 /* PhoneViewController.swift in Sources */,
 				790579762BBADEA700EAD2D1 /* SearchTableViewCell.swift in Sources */,
 				041280262AEF9BAB00972552 /* SceneDelegate.swift in Sources */,
