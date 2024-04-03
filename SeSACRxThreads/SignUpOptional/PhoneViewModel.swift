@@ -15,8 +15,8 @@ final class PhoneViewModel {
     let inputNextButtonTapped = BehaviorRelay(value: ())
     let inputPhoneText = BehaviorRelay(value: "")
     
-    let validText = Observable.just("10자 이상, 숫자만 적어주세요")
-    let commonNumber = Observable.just("010")
+    let validText = BehaviorRelay(value: "10자 이상, 숫자만 적어주세요")
+    let commonNumber = BehaviorSubject(value: "010")
 
     let outputNextButton = PublishRelay<Void>()
     let descriptionText = BehaviorRelay(value: "")
@@ -34,7 +34,8 @@ final class PhoneViewModel {
             .disposed(by: disposeBag)
         
         validText
-            .bind(to:descriptionText)
+            .asDriver()
+            .drive(descriptionText)
             .disposed(by: disposeBag)
         
         commonNumber
