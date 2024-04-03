@@ -36,6 +36,7 @@
 		7960C22F2BBD39A4009D1B6A /* ShoppingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7960C22E2BBD39A4009D1B6A /* ShoppingViewModel.swift */; };
 		7960C2312BBD5193009D1B6A /* SignUpViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7960C2302BBD5193009D1B6A /* SignUpViewModel.swift */; };
 		7960C2332BBD5F18009D1B6A /* PasswordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7960C2322BBD5F18009D1B6A /* PasswordViewModel.swift */; };
+		7960C2352BBD63F7009D1B6A /* BirthdayViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7960C2342BBD63F7009D1B6A /* BirthdayViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -86,6 +87,7 @@
 		7960C22E2BBD39A4009D1B6A /* ShoppingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingViewModel.swift; sourceTree = "<group>"; };
 		7960C2302BBD5193009D1B6A /* SignUpViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewModel.swift; sourceTree = "<group>"; };
 		7960C2322BBD5F18009D1B6A /* PasswordViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordViewModel.swift; sourceTree = "<group>"; };
+		7960C2342BBD63F7009D1B6A /* BirthdayViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BirthdayViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -207,6 +209,7 @@
 			isa = PBXGroup;
 			children = (
 				0412806E2AEFAD2D00972552 /* BirthdayViewController.swift */,
+				7960C2342BBD63F7009D1B6A /* BirthdayViewModel.swift */,
 				041280702AEFAD3D00972552 /* PhoneViewController.swift */,
 				041280722AEFAD4B00972552 /* NicknameViewController.swift */,
 			);
@@ -396,6 +399,7 @@
 				041280732AEFAD4B00972552 /* NicknameViewController.swift in Sources */,
 				0412806A2AEFA91E00972552 /* SignUpViewController.swift in Sources */,
 				7905797B2BBAEC5500EAD2D1 /* ShoppingTableViewCell.swift in Sources */,
+				7960C2352BBD63F7009D1B6A /* BirthdayViewModel.swift in Sources */,
 				041280712AEFAD3D00972552 /* PhoneViewController.swift in Sources */,
 				790579762BBADEA700EAD2D1 /* SearchTableViewCell.swift in Sources */,
 				041280262AEF9BAB00972552 /* SceneDelegate.swift in Sources */,

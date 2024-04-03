@@ -65,11 +65,9 @@ class BirthdayViewController: UIViewController {
   
     let nextButton = PointButton(title: "가입하기")
     
-    let yearText = PublishSubject<Int>()
-    let monthText = PublishSubject<Int>()
-    let dayText = PublishSubject<Int>()
-
     let disposeBag = DisposeBag()
+    
+    private let viewModel = BirthdayViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -81,24 +79,24 @@ class BirthdayViewController: UIViewController {
     }
     
     private func bind() {
-        // Subscribe
-        yearText
-            .map { "\($0)년"}
-            .bind(to: yearLabel.rx.text)
+        viewModel.outputYearLabel
+            .asDriver(onErrorJustReturn: "")
+            .drive(yearLabel.rx.text)
             .disposed(by: disposeBag)
         
-        monthText
-            .map { "\($0)월"}
-            .bind(to: monthLabel.rx.text)
+        viewModel.outputMonthLabel
+            .asDriver(onErrorJustReturn: "")
+            .drive(monthLabel.rx.text)
+            .disposed(by: disposeBag)
+
+        viewModel.outputDayLabel
+            .asDriver(onErrorJustReturn: "")
+            .drive(dayLabel.rx.text)
             .disposed(by: disposeBag)
         
-        dayText
-            .map { "\($0)일" }
-            .bind(to: dayLabel.rx.text)
-            .disposed(by: disposeBag)
-        
-        nextButton.rx.tap
-            .bind(onNext: { _ in
+        viewModel.outputNextButtonTapped
+            .asDriver(onErrorJustReturn: ())
+            .drive(onNext: { _ in
                 let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
                 
                 let sceneDelegate = windowScene?.delegate as? SceneDelegate
@@ -107,42 +105,31 @@ class BirthdayViewController: UIViewController {
                 
                 sceneDelegate?.window?.rootViewController = nav
                 sceneDelegate?.window?.makeKeyAndVisible()
-
             })
             .disposed(by: disposeBag)
-
-        birthDayPicker.rx.date
-            .bind(with: self) { owner, date in
-                let component = Calendar.current.dateComponents([.year, .month, .day], from: date)
-                // Emit
-                owner.yearText.onNext(component.year!)
-                owner.monthText.on(.next(component.month!))
-                owner.dayText.onNext(component.day!)
-            }
+            
+        nextButton.rx.tap
+            .bind(to: viewModel.inputNextButtonTapped)
             .disposed(by: disposeBag)
         
-        // Observable
-        let validation = birthDayPicker.rx.date
-            .map {
-                let selectDate = Calendar.current.dateComponents([.year], from: $0)
-                let today = Calendar.current.dateComponents([.year], from: Date())
-                return (today.year! - selectDate.year!) >= 17
-            }
+
+        birthDayPicker.rx.date
+            .bind(to: viewModel.inputPicker)
+            .disposed(by: disposeBag)
         
-        // Observer
-        validation
-            .bind(with: self) { owner, value in
-                let text = value ? "가입 가능한 나이입니다" : "만 17세 이상만 가입 가능합니다"
-                owner.infoLabel.text = text
+        viewModel.outputInfoLabelText
+            .bind(to: infoLabel.rx.text)
+            .disposed(by: disposeBag)
+        
+        viewModel.outputValidation
+            .asDriver()
+            .drive(with: self) { owner, value in
                 let textColor = value ? UIColor.systemBlue : UIColor.systemRed
                 let buttonColor = value ? UIColor.systemBlue : UIColor.gray
                 owner.infoLabel.textColor = textColor
                 owner.nextButton.backgroundColor = buttonColor
+                owner.nextButton.isEnabled = value
             }
-            .disposed(by: disposeBag)
-        
-        validation
-            .bind(to: nextButton.rx.isEnabled)
             .disposed(by: disposeBag)
     }
     
