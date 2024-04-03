@@ -29,25 +29,51 @@ class NicknameViewController: UIViewController {
     }
     
     private func bind() {
-        nextButton.rx.tap
-            .bind(to: viewModel.inputNextButton)
-            .disposed(by: disposeBag)
+//        nextButton.rx.tap
+//            .bind(to: viewModel.inputNextButton)
+//            .disposed(by: disposeBag)
+//        
+//        viewModel.outputNextButton
+//            .bind(with: self){ owner, _ in
+//                owner.navigationController?.pushViewController(BirthdayViewController(), animated: true)
+//            }
+//            .disposed(by: disposeBag)
+//        
+//        nicknameTextField.rx.text.orEmpty
+//            .bind(to: viewModel.inputNickname)
+//            .disposed(by: disposeBag)
+//            
+//        viewModel.outputValidation
+//            .bind(to: nextButton.rx.isEnabled)
+//            .disposed(by: disposeBag)
+//        
+//        viewModel.outputValidation
+//            .bind(with: self) { owner, value in
+//                let color = value ? UIColor.systemPink : UIColor.gray
+//                owner.nextButton.backgroundColor = color
+//                let text = value ? "다음" : "3글자 이상 입력해주세요"
+//                owner.nextButton.setTitle(text, for: .normal)
+//            }
+//            .disposed(by: disposeBag)
         
-        viewModel.outputNextButton
-            .bind(with: self){ owner, _ in
+        let input = NicknameViewModel.Input(tap: nextButton.rx.tap, text: nicknameTextField.rx.text)
+        let output = viewModel.transform(input: input)
+        
+        output.tap
+            .bind(with: self) { owner, _ in
                 owner.navigationController?.pushViewController(BirthdayViewController(), animated: true)
             }
             .disposed(by: disposeBag)
         
-        nicknameTextField.rx.text.orEmpty
-            .bind(to: viewModel.inputNickname)
+        output.text
+            .drive(nextButton.rx.title())
             .disposed(by: disposeBag)
-            
-        viewModel.outputValidation
+        
+        output.validation
             .bind(to: nextButton.rx.isEnabled)
             .disposed(by: disposeBag)
         
-        viewModel.outputValidation
+        output.validation
             .bind(with: self) { owner, value in
                 let color = value ? UIColor.systemPink : UIColor.gray
                 owner.nextButton.backgroundColor = color
@@ -55,6 +81,7 @@ class NicknameViewController: UIViewController {
                 owner.nextButton.setTitle(text, for: .normal)
             }
             .disposed(by: disposeBag)
+
     }
 
     
