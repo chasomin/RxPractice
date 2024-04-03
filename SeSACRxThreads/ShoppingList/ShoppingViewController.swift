@@ -16,9 +16,9 @@ final class ShoppingViewController: UIViewController {
     private let tableView = UITableView()
     private let searchBar = UISearchBar()
     
-    private var data = [ShoppingData(todo: "커피 구매"), ShoppingData(todo: "지갑 구매"), ShoppingData( todo: "비타민 구매")]
-    private lazy var items = BehaviorSubject(value: data)
     private let disposeBag = DisposeBag()
+    
+    private let viewModel = ShoppingViewModel()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,85 +28,71 @@ final class ShoppingViewController: UIViewController {
     }
     
     private func bind() {
-        items
-            .bind(to: tableView.rx.items(cellIdentifier: ShoppingTableViewCell.id, cellType: ShoppingTableViewCell.self)) { [weak self] (row, element, cell) in
+        
+        addButton.rx.tap
+            .bind(to: viewModel.inputAddbuttonTapped)
+            .disposed(by: disposeBag)
+        
+        textField.rx.text.orEmpty
+            .bind(to: viewModel.inputTextFieldText)
+            .disposed(by: disposeBag)
+        
+        searchBar.rx.text.orEmpty
+            .bind(to: viewModel.inputSearchText)
+            .disposed(by: disposeBag)
+        
+        searchBar.rx.searchButtonClicked
+            .bind(to: viewModel.inputSearchButtonTapped)
+            .disposed(by: disposeBag)
+        
+        tableView.rx.itemSelected
+            .bind(to: viewModel.inputTableViewSelected)
+            .disposed(by: disposeBag)
+
+        tableView.rx.modelSelected(ShoppingData.self)
+            .bind(to: viewModel.inputTableViewSelectedItem)
+            .disposed(by: disposeBag)
+        
+        viewModel.outputItem
+            .asDriver()
+            .drive(tableView.rx.items(cellIdentifier: ShoppingTableViewCell.id, cellType: ShoppingTableViewCell.self)) { [weak self] (row, element, cell) in
                 guard let self else { return }
                 cell.configureCell(element: element)
                 
                 cell.checkButton.rx.tap
                     .bind(with: self) { owner, _ in
-                        owner.data[row].check.toggle()
-                        owner.items.onNext(owner.data)
+                        var item = owner.viewModel.outputItem.value
+                        item[row].check.toggle()
+                        owner.viewModel.outputItem.accept(item)
                     }
                     .disposed(by: cell.disposeBag)
                 
                 cell.bookMarkButton.rx.tap
                     .bind(with: self) { owner, _ in
-                        owner.data[row].bookMark.toggle()
-                        owner.items.onNext(owner.data)
+                        var item = owner.viewModel.outputItem.value
+                        item[row].bookMark.toggle()
+                        owner.viewModel.outputItem.accept(item)
                     }
                     .disposed(by: cell.disposeBag)
-
+                
                 cell.moveButton.rx.tap
                     .bind(with: self) { owner, _ in
                         owner.navigationController?.pushViewController(BirthdayViewController(), animated: true)
                     }
                     .disposed(by: cell.disposeBag)
-
+                
                 cell.editButton.rx.tap
                     .withLatestFrom(self.textField.rx.text.orEmpty)
                     .bind(with: self) { owner, value in
-                        owner.data[row].todo = value
-                        owner.items.onNext(owner.data)
+                        var item = owner.viewModel.outputItem.value
+                        item[row].todo = value
+                        owner.viewModel.outputItem.accept(item)
                     }
                     .disposed(by: cell.disposeBag)
-
-            }
-            .disposed(by: disposeBag)
-        
-        addButton.rx.tap
-            .withLatestFrom(textField.rx.text.orEmpty)
-            .throttle(.seconds(1), scheduler: MainScheduler.instance)
-            .distinctUntilChanged()
-            .bind(with: self) { owner, value in
-                owner.data.insert(ShoppingData(todo: value), at: 0)
-                owner.items.onNext(owner.data)
-                owner.textField.text = ""
-            }
-            .disposed(by: disposeBag)
-        
-        searchBar.rx.text.orEmpty
-            .debounce(.seconds(1), scheduler: MainScheduler.instance)
-            .distinctUntilChanged()
-            .bind(with: self) { owner, value in
-                print("실시간 검색 ", value)
-                let result = value.isEmpty ? owner.data : owner.data.filter { $0.todo.contains(value) }
-                owner.items.onNext(result)
-            }
-            .disposed(by: disposeBag)
-        
-        searchBar.rx.searchButtonClicked
-            .throttle(.seconds(1), scheduler: MainScheduler.instance)
-            .withLatestFrom(searchBar.rx.text.orEmpty)
-            .distinctUntilChanged()
-            .bind(with: self) { owner, value in
-                print("검색 버튼 클릭 ", value)
-                let result = value.isEmpty ? owner.data : owner.data.filter { $0.todo.contains(value) }
-                owner.items.onNext(result)
-            }
-            .disposed(by: disposeBag)
-        
-        Observable.zip(tableView.rx.itemSelected, tableView.rx.modelSelected(ShoppingData.self))
-            .bind(with: self) { owner, value in
-                let row = value.0.row
-                let item = value.1
                 
-                owner.data.remove(at: row)
-                owner.items.onNext(owner.data)
-                
-                owner.showAlert(text: item.todo)
             }
             .disposed(by: disposeBag)
+        
     }
     
     private func configureView() {

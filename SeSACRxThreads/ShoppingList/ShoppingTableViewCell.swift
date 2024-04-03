@@ -40,7 +40,6 @@ final class ShoppingTableViewCell: UITableViewCell {
         todoLabel.text = element.todo
         element.check ? checkButton.setImage(UIImage(systemName: "checkmark.square.fill"), for: .normal) : checkButton.setImage(UIImage(systemName: "checkmark.square"), for: .normal)
         element.bookMark ? bookMarkButton.setImage(UIImage(systemName: "star.fill"), for: .normal) : bookMarkButton.setImage(UIImage(systemName: "star"), for: .normal)
-
     }
     
     private func configureView() {

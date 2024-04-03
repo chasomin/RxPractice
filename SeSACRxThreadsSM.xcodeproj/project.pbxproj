@@ -33,6 +33,7 @@
 		790579762BBADEA700EAD2D1 /* SearchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790579742BBADEA700EAD2D1 /* SearchTableViewCell.swift */; };
 		790579792BBAEB3000EAD2D1 /* ShoppingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790579782BBAEB3000EAD2D1 /* ShoppingViewController.swift */; };
 		7905797B2BBAEC5500EAD2D1 /* ShoppingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7905797A2BBAEC5500EAD2D1 /* ShoppingTableViewCell.swift */; };
+		7960C22F2BBD39A4009D1B6A /* ShoppingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7960C22E2BBD39A4009D1B6A /* ShoppingViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -80,6 +81,7 @@
 		790579742BBADEA700EAD2D1 /* SearchTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchTableViewCell.swift; sourceTree = "<group>"; };
 		790579782BBAEB3000EAD2D1 /* ShoppingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingViewController.swift; sourceTree = "<group>"; };
 		7905797A2BBAEC5500EAD2D1 /* ShoppingTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingTableViewCell.swift; sourceTree = "<group>"; };
+		7960C22E2BBD39A4009D1B6A /* ShoppingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -226,6 +228,7 @@
 			isa = PBXGroup;
 			children = (
 				790579782BBAEB3000EAD2D1 /* ShoppingViewController.swift */,
+				7960C22E2BBD39A4009D1B6A /* ShoppingViewModel.swift */,
 				7905797A2BBAEC5500EAD2D1 /* ShoppingTableViewCell.swift */,
 			);
 			path = ShoppingList;
@@ -379,6 +382,7 @@
 				790579792BBAEB3000EAD2D1 /* ShoppingViewController.swift in Sources */,
 				041280282AEF9BAB00972552 /* ViewController.swift in Sources */,
 				7905796C2BB88FAF00EAD2D1 /* SampleViewController.swift in Sources */,
+				7960C22F2BBD39A4009D1B6A /* ShoppingViewModel.swift in Sources */,
 				041280632AEFA0CE00972552 /* PointButton.swift in Sources */,
 				041280242AEF9BAB00972552 /* AppDelegate.swift in Sources */,
 				041280732AEFAD4B00972552 /* NicknameViewController.swift in Sources */,
@@ -568,6 +572,7 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -598,6 +603,7 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
