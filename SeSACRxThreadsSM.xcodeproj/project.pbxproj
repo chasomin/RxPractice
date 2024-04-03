@@ -35,6 +35,7 @@
 		7905797B2BBAEC5500EAD2D1 /* ShoppingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7905797A2BBAEC5500EAD2D1 /* ShoppingTableViewCell.swift */; };
 		7960C22F2BBD39A4009D1B6A /* ShoppingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7960C22E2BBD39A4009D1B6A /* ShoppingViewModel.swift */; };
 		7960C2312BBD5193009D1B6A /* SignUpViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7960C2302BBD5193009D1B6A /* SignUpViewModel.swift */; };
+		7960C2332BBD5F18009D1B6A /* PasswordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7960C2322BBD5F18009D1B6A /* PasswordViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -84,6 +85,7 @@
 		7905797A2BBAEC5500EAD2D1 /* ShoppingTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingTableViewCell.swift; sourceTree = "<group>"; };
 		7960C22E2BBD39A4009D1B6A /* ShoppingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingViewModel.swift; sourceTree = "<group>"; };
 		7960C2302BBD5193009D1B6A /* SignUpViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewModel.swift; sourceTree = "<group>"; };
+		7960C2322BBD5F18009D1B6A /* PasswordViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -178,6 +180,7 @@
 				041280692AEFA91E00972552 /* SignUpViewController.swift */,
 				7960C2302BBD5193009D1B6A /* SignUpViewModel.swift */,
 				0412806B2AEFABFE00972552 /* PasswordViewController.swift */,
+				7960C2322BBD5F18009D1B6A /* PasswordViewModel.swift */,
 			);
 			path = SignUp;
 			sourceTree = "<group>";
@@ -377,6 +380,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				790579752BBADEA700EAD2D1 /* SearchViewController.swift in Sources */,
+				7960C2332BBD5F18009D1B6A /* PasswordViewModel.swift in Sources */,
 				041280782AF1D14000972552 /* Resource.swift in Sources */,
 				7960C2312BBD5193009D1B6A /* SignUpViewModel.swift in Sources */,
 				0412806F2AEFAD2D00972552 /* BirthdayViewController.swift in Sources */,
