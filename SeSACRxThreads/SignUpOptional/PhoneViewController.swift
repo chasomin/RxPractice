@@ -16,9 +16,9 @@ class PhoneViewController: UIViewController {
     let nextButton = PointButton(title: "다음")
     let descriptionLabel = UILabel()
     
-    let validText = Observable.just("10자 이상, 숫자만 적어주세요")
-    let commonNumber = Observable.just("010")
     let disposeBag = DisposeBag()
+    
+    let viewModel = PhoneViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,33 +32,36 @@ class PhoneViewController: UIViewController {
     
     private func bind() {
         nextButton.rx.tap
-            .bind(with: self) { owner, _ in
+            .bind(to: viewModel.inputNextButtonTapped)
+            .disposed(by: disposeBag)
+        
+        viewModel.outputNextButton
+            .asDriver(onErrorJustReturn: ())
+            .drive(with: self) { owner, _ in
                 owner.navigationController?.pushViewController(NicknameViewController(), animated: true)
             }
             .disposed(by: disposeBag)
         
-        validText
-            .bind(to: descriptionLabel.rx.text)
+        viewModel.descriptionText
+            .asDriver()
+            .drive(descriptionLabel.rx.text)
             .disposed(by: disposeBag)
         
-        commonNumber
-            .bind(to: phoneTextField.rx.text)
+        viewModel.outputPhoneNumber
+            .asDriver()
+            .drive(phoneTextField.rx.text)
             .disposed(by: disposeBag)
         
-        let numberCheck = phoneTextField.rx.text.orEmpty.map { Int($0) != nil }
-        let lengthCheck = phoneTextField.rx.text.orEmpty.map { $0.count >= 10 }
-        
-        let result = Observable.combineLatest(numberCheck, lengthCheck) { num, length in
-            return num && length
-        }
-        
-        result
-            .bind(to: nextButton.rx.isEnabled, descriptionLabel.rx.isHidden)
+        phoneTextField.rx.text.orEmpty
+            .bind(to: viewModel.inputPhoneText)
             .disposed(by: disposeBag)
         
-        result
-            .bind(with: self) { owner, value in
+        viewModel.outputValidation
+            .asDriver()
+            .drive(with: self) { owner, value in
                 let color = value ? UIColor.systemPink : UIColor.gray
+                owner.nextButton.isEnabled = value
+                owner.descriptionLabel.isHidden = value
                 owner.nextButton.backgroundColor = color
             }
             .disposed(by: disposeBag)
