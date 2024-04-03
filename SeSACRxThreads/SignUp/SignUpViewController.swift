@@ -16,9 +16,9 @@ class SignUpViewController: UIViewController {
     let validationButton = UIButton()
     let nextButton = PointButton(title: "다음")
     
-    let userEmail = ["a@a.com", "b@b.com"]
     let disposeBag = DisposeBag()
-    let availableEmail = BehaviorSubject(value: false)
+    
+    private let viewModel = SignUpViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,41 +32,47 @@ class SignUpViewController: UIViewController {
     
     private func bind() {
         nextButton.rx.tap
-            .bind(with: self) { owner, _ in
+            .bind(to: viewModel.inputNextButtonTapped)
+            .disposed(by: disposeBag)
+        
+        viewModel.outputNextButtonTapped
+            .asDriver(onErrorJustReturn: ())
+            .drive(with: self, onNext: { owner, _ in
                 owner.navigationController?.pushViewController(PasswordViewController(), animated: true)
+            })
+            .disposed(by: disposeBag)
+        
+        
+        emailTextField.rx.text.orEmpty
+            .bind(to: viewModel.inputEmailText)
+            .disposed(by: disposeBag)
+        
+        viewModel.outputValidText
+            .asDriver(onErrorJustReturn: "")
+            .drive(with: self) { owner, value in
+                owner.nextButton.setTitle(value, for: .normal)
             }
             .disposed(by: disposeBag)
         
-        let userEmailValid = emailTextField.rx.text.orEmpty
-            .map { $0.count >= 7 }
-        userEmailValid
-            .bind(with: self) { owner, value in
-                let text = value ? "중복 확인 해주세요" : "7자 이상 입력해주세요"
-                owner.nextButton.setTitle(text, for: .normal)
-            }
-            .disposed(by: disposeBag)
-        
-        availableEmail
-            .bind(with: self) { owner, value in
-                let text = value ? "사용 가능한 이메일" : "사용 불가능한 이메일"
-                owner.nextButton.setTitle(text, for: .normal)
+        viewModel.outputValidStatus
+            .asDriver(onErrorJustReturn: false)
+            .drive(with: self) { owner, value in
                 let color = value ? UIColor.systemBlue : UIColor.gray
                 owner.nextButton.backgroundColor = color
             }
             .disposed(by: disposeBag)
         
-        availableEmail
+        viewModel.availableEmail
             .bind(to: nextButton.rx.isEnabled)
             .disposed(by: disposeBag)
-        
+
         validationButton.rx.tap
-            .bind(with: self) { owner, _ in
-                owner.availableEmail.onNext(!owner.userEmail.contains(owner.emailTextField.text!))
-            }
+            .bind(to: viewModel.inputValidationButtonTapped)
             .disposed(by: disposeBag)
         
-        let everythingValid = Observable.combineLatest(userEmailValid, availableEmail) { $0 && $1 }
-        
+        viewModel.outputAllValidation
+            .bind(to: nextButton.rx.isEnabled)
+            .disposed(by: disposeBag)
     }
         
     func configure() {
