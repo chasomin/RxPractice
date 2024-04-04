@@ -28,50 +28,29 @@ final class ShoppingViewController: UIViewController {
     }
     
     private func bind() {
-        
-        addButton.rx.tap
-            .bind(to: viewModel.inputAddbuttonTapped)
-            .disposed(by: disposeBag)
-        
-        textField.rx.text.orEmpty
-            .bind(to: viewModel.inputTextFieldText)
-            .disposed(by: disposeBag)
-        
-        searchBar.rx.text.orEmpty
-            .bind(to: viewModel.inputSearchText)
-            .disposed(by: disposeBag)
-        
-        searchBar.rx.searchButtonClicked
-            .bind(to: viewModel.inputSearchButtonTapped)
-            .disposed(by: disposeBag)
-        
-        tableView.rx.itemSelected
-            .bind(to: viewModel.inputTableViewSelected)
-            .disposed(by: disposeBag)
+        let checkIndex = PublishRelay<Int>()
+        let bookmarkIndex = PublishRelay<Int>()
+        let editIndex = PublishRelay<Int>()
 
-        tableView.rx.modelSelected(ShoppingData.self)
-            .bind(to: viewModel.inputTableViewSelectedItem)
-            .disposed(by: disposeBag)
+        let input = ShoppingViewModel.Input(addTap: addButton.rx.tap, searchTap: searchBar.rx.searchButtonClicked, addText: textField.rx.text, searchText: searchBar.rx.text, tableViewIndex: tableView.rx.itemSelected, checkIndex: checkIndex, bookmarkIndex: bookmarkIndex, editIndex: editIndex)
+        let output = viewModel.transform(input: input)
         
-        viewModel.outputItem
-            .asDriver()
+        output
+            .item
             .drive(tableView.rx.items(cellIdentifier: ShoppingTableViewCell.id, cellType: ShoppingTableViewCell.self)) { [weak self] (row, element, cell) in
                 guard let self else { return }
                 cell.configureCell(element: element)
+
                 
                 cell.checkButton.rx.tap
                     .bind(with: self) { owner, _ in
-                        var item = owner.viewModel.outputItem.value
-                        item[row].check.toggle()
-                        owner.viewModel.outputItem.accept(item)
+                        input.checkIndex.accept(row)
                     }
                     .disposed(by: cell.disposeBag)
                 
                 cell.bookMarkButton.rx.tap
                     .bind(with: self) { owner, _ in
-                        var item = owner.viewModel.outputItem.value
-                        item[row].bookMark.toggle()
-                        owner.viewModel.outputItem.accept(item)
+                        input.bookmarkIndex.accept(row)
                     }
                     .disposed(by: cell.disposeBag)
                 
@@ -83,17 +62,82 @@ final class ShoppingViewController: UIViewController {
                 
                 cell.editButton.rx.tap
                     .withLatestFrom(self.textField.rx.text.orEmpty)
-                    .bind(with: self) { owner, value in
-                        var item = owner.viewModel.outputItem.value
-                        item[row].todo = value
-                        owner.viewModel.outputItem.accept(item)
+                    .bind(with: self) { owner, text in
+                        input.editIndex.accept(row)
                     }
                     .disposed(by: cell.disposeBag)
                 
             }
             .disposed(by: disposeBag)
-        
     }
+    
+//    private func bind() {
+//
+//        addButton.rx.tap
+//            .bind(to: viewModel.inputAddbuttonTapped)
+//            .disposed(by: disposeBag)
+//
+//        textField.rx.text.orEmpty
+//            .bind(to: viewModel.inputTextFieldText)
+//            .disposed(by: disposeBag)
+//
+//        searchBar.rx.text.orEmpty
+//            .bind(to: viewModel.inputSearchText)
+//            .disposed(by: disposeBag)
+//
+//        searchBar.rx.searchButtonClicked
+//            .bind(to: viewModel.inputSearchButtonTapped)
+//            .disposed(by: disposeBag)
+//
+//        tableView.rx.itemSelected
+//            .bind(to: viewModel.inputTableViewSelected)
+//            .disposed(by: disposeBag)
+//
+//        tableView.rx.modelSelected(ShoppingData.self)
+//            .bind(to: viewModel.inputTableViewSelectedItem)
+//            .disposed(by: disposeBag)
+//
+//        viewModel.outputItem
+//            .asDriver()
+//            .drive(tableView.rx.items(cellIdentifier: ShoppingTableViewCell.id, cellType: ShoppingTableViewCell.self)) { [weak self] (row, element, cell) in
+//                guard let self else { return }
+//                cell.configureCell(element: element)
+//
+//                cell.checkButton.rx.tap
+//                    .bind(with: self) { owner, _ in
+//                        var item = owner.viewModel.outputItem.value
+//                        item[row].check.toggle()
+//                        owner.viewModel.outputItem.accept(item)
+//                    }
+//                    .disposed(by: cell.disposeBag)
+//                
+//                cell.bookMarkButton.rx.tap
+//                    .bind(with: self) { owner, _ in
+//                        var item = owner.viewModel.outputItem.value
+//                        item[row].bookMark.toggle()
+//                        owner.viewModel.outputItem.accept(item)
+//                    }
+//                    .disposed(by: cell.disposeBag)
+//                
+//                cell.moveButton.rx.tap
+//                    .bind(with: self) { owner, _ in
+//                        owner.navigationController?.pushViewController(BirthdayViewController(), animated: true)
+//                    }
+//                    .disposed(by: cell.disposeBag)
+//                
+//                cell.editButton.rx.tap
+//                    .withLatestFrom(self.textField.rx.text.orEmpty)
+//                    .bind(with: self) { owner, value in
+//                        var item = owner.viewModel.outputItem.value
+//                        item[row].todo = value
+//                        owner.viewModel.outputItem.accept(item)
+//                    }
+//                    .disposed(by: cell.disposeBag)
+//                
+//            }
+//            .disposed(by: disposeBag)
+//        
+//    }
     
     private func configureView() {
         view.backgroundColor = .white
