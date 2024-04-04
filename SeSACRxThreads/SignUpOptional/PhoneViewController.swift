@@ -31,41 +31,68 @@ class PhoneViewController: UIViewController {
     }
     
     private func bind() {
-        nextButton.rx.tap
-            .bind(to: viewModel.inputNextButtonTapped)
+        let input = PhoneViewModel.Input(tap: nextButton.rx.tap, phoneNum: phoneTextField.rx.text)
+        let output = viewModel.transform(input: input)
+        
+        output.commonNumber
+            .drive(phoneTextField.rx.text)
             .disposed(by: disposeBag)
         
-        viewModel.outputNextButton
-            .asDriver(onErrorJustReturn: ())
-            .drive(with: self) { owner, _ in
+        output.description
+            .drive(descriptionLabel.rx.text)
+            .disposed(by: disposeBag)
+        
+        output.tap
+            .bind(with: self) { owner, _ in
                 owner.navigationController?.pushViewController(NicknameViewController(), animated: true)
             }
             .disposed(by: disposeBag)
         
-        viewModel.descriptionText
-            .asDriver()
-            .drive(descriptionLabel.rx.text)
-            .disposed(by: disposeBag)
-        
-        viewModel.outputPhoneNumber
-            .asDriver()
-            .drive(phoneTextField.rx.text)
-            .disposed(by: disposeBag)
-        
-        phoneTextField.rx.text.orEmpty
-            .bind(to: viewModel.inputPhoneText)
-            .disposed(by: disposeBag)
-        
-        viewModel.outputValidation
-            .asDriver()
+        output.validation
             .drive(with: self) { owner, value in
                 let color = value ? UIColor.systemPink : UIColor.gray
-                owner.nextButton.isEnabled = value
-                owner.descriptionLabel.isHidden = value
                 owner.nextButton.backgroundColor = color
+                owner.nextButton.isEnabled = value
             }
             .disposed(by: disposeBag)
     }
+    
+//    private func bind() {
+//        nextButton.rx.tap
+//            .bind(to: viewModel.inputNextButtonTapped)
+//            .disposed(by: disposeBag)
+//        
+//        viewModel.outputNextButton
+//            .asDriver(onErrorJustReturn: ())
+//            .drive(with: self) { owner, _ in
+//                owner.navigationController?.pushViewController(NicknameViewController(), animated: true)
+//            }
+//            .disposed(by: disposeBag)
+//        
+//        viewModel.descriptionText
+//            .asDriver()
+//            .drive(descriptionLabel.rx.text)
+//            .disposed(by: disposeBag)
+//        
+//        viewModel.outputPhoneNumber
+//            .asDriver()
+//            .drive(phoneTextField.rx.text)
+//            .disposed(by: disposeBag)
+//        
+//        phoneTextField.rx.text.orEmpty
+//            .bind(to: viewModel.inputPhoneText)
+//            .disposed(by: disposeBag)
+//        
+//        viewModel.outputValidation
+//            .asDriver()
+//            .drive(with: self) { owner, value in
+//                let color = value ? UIColor.systemPink : UIColor.gray
+//                owner.nextButton.isEnabled = value
+//                owner.descriptionLabel.isHidden = value
+//                owner.nextButton.backgroundColor = color
+//            }
+//            .disposed(by: disposeBag)
+//    }
 
     
     func configureLayout() {
