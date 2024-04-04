@@ -79,59 +79,100 @@ class BirthdayViewController: UIViewController {
     }
     
     private func bind() {
-        viewModel.outputYearLabel
-            .asDriver(onErrorJustReturn: "")
+        let input = BirthdayViewModel.Input(nextButtonTap: nextButton.rx.tap, birthday: birthDayPicker.rx.date)
+        let output = viewModel.transform(input: input)
+        
+        output.year
             .drive(yearLabel.rx.text)
             .disposed(by: disposeBag)
-        
-        viewModel.outputMonthLabel
-            .asDriver(onErrorJustReturn: "")
+
+        output.month
             .drive(monthLabel.rx.text)
             .disposed(by: disposeBag)
 
-        viewModel.outputDayLabel
-            .asDriver(onErrorJustReturn: "")
+        output.day
             .drive(dayLabel.rx.text)
             .disposed(by: disposeBag)
         
-        viewModel.outputNextButtonTapped
-            .asDriver(onErrorJustReturn: ())
-            .drive(onNext: { _ in
+        output.tap
+            .bind(with: self) { owner, _ in
                 let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
-                
                 let sceneDelegate = windowScene?.delegate as? SceneDelegate
-                
-                let nav = UINavigationController(rootViewController: SampleViewController())
-                
+                let nav = UINavigationController(rootViewController: ShoppingViewController())
                 sceneDelegate?.window?.rootViewController = nav
                 sceneDelegate?.window?.makeKeyAndVisible()
-            })
-            .disposed(by: disposeBag)
-            
-        nextButton.rx.tap
-            .bind(to: viewModel.inputNextButtonTapped)
-            .disposed(by: disposeBag)
-        
-
-        birthDayPicker.rx.date
-            .bind(to: viewModel.inputPicker)
-            .disposed(by: disposeBag)
-        
-        viewModel.outputInfoLabelText
-            .bind(to: infoLabel.rx.text)
-            .disposed(by: disposeBag)
-        
-        viewModel.outputValidation
-            .asDriver()
-            .drive(with: self) { owner, value in
-                let textColor = value ? UIColor.systemBlue : UIColor.systemRed
-                let buttonColor = value ? UIColor.systemBlue : UIColor.gray
-                owner.infoLabel.textColor = textColor
-                owner.nextButton.backgroundColor = buttonColor
-                owner.nextButton.isEnabled = value
             }
             .disposed(by: disposeBag)
+        
+        output.validation
+            .drive(nextButton.rx.isEnabled)
+            .disposed(by: disposeBag)
+
+        output.validation
+            .drive(with: self) { owner, value in
+                let color = value ? UIColor.systemPink : UIColor.gray
+                owner.nextButton.backgroundColor = color
+            }
+            .disposed(by: disposeBag)
+        
+        output.description
+            .drive(infoLabel.rx.text)
+            .disposed(by: disposeBag)
     }
+//    private func bind() {
+//        viewModel.outputYearLabel
+//            .asDriver(onErrorJustReturn: "")
+//            .drive(yearLabel.rx.text)
+//            .disposed(by: disposeBag)
+//        
+//        viewModel.outputMonthLabel
+//            .asDriver(onErrorJustReturn: "")
+//            .drive(monthLabel.rx.text)
+//            .disposed(by: disposeBag)
+//
+//        viewModel.outputDayLabel
+//            .asDriver(onErrorJustReturn: "")
+//            .drive(dayLabel.rx.text)
+//            .disposed(by: disposeBag)
+//        
+//        viewModel.outputNextButtonTapped
+//            .asDriver(onErrorJustReturn: ())
+//            .drive(onNext: { _ in
+//                let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
+//                
+//                let sceneDelegate = windowScene?.delegate as? SceneDelegate
+//                
+//                let nav = UINavigationController(rootViewController: SampleViewController())
+//                
+//                sceneDelegate?.window?.rootViewController = nav
+//                sceneDelegate?.window?.makeKeyAndVisible()
+//            })
+//            .disposed(by: disposeBag)
+//            
+//        nextButton.rx.tap
+//            .bind(to: viewModel.inputNextButtonTapped)
+//            .disposed(by: disposeBag)
+//        
+//
+//        birthDayPicker.rx.date
+//            .bind(to: viewModel.inputPicker)
+//            .disposed(by: disposeBag)
+//        
+//        viewModel.outputInfoLabelText
+//            .bind(to: infoLabel.rx.text)
+//            .disposed(by: disposeBag)
+//        
+//        viewModel.outputValidation
+//            .asDriver()
+//            .drive(with: self) { owner, value in
+//                let textColor = value ? UIColor.systemBlue : UIColor.systemRed
+//                let buttonColor = value ? UIColor.systemBlue : UIColor.gray
+//                owner.infoLabel.textColor = textColor
+//                owner.nextButton.backgroundColor = buttonColor
+//                owner.nextButton.isEnabled = value
+//            }
+//            .disposed(by: disposeBag)
+//    }
     
     func configureLayout() {
         view.addSubview(infoLabel)
