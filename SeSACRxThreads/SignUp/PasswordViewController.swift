@@ -15,7 +15,6 @@ class PasswordViewController: UIViewController {
     let passwordTextField = SignTextField(placeholderText: "비밀번호를 입력해주세요")
     let nextButton = PointButton(title: "다음")
     let descriptionLabel = UILabel()
-    let validText = Observable.just("8자 이상 입력해주세요")
 
     let disposeBag = DisposeBag()
     let viewModel = PasswordViewModel()
@@ -32,38 +31,64 @@ class PasswordViewController: UIViewController {
     }
     
     private func bind() {
-        nextButton.rx.tap
-            .bind(to: viewModel.inputNextButtonTapped)
-            .disposed(by: disposeBag)
+        let input = PasswordViewModel.Input(nextTap: nextButton.rx.tap, password: passwordTextField.rx.text)
+        let output = viewModel.transform(input: input)
         
-        viewModel.outputNextButton
+        output.nextTap
             .bind(with: self) { owner, _ in
                 owner.navigationController?.pushViewController(PhoneViewController(), animated: true)
             }
             .disposed(by: disposeBag)
         
-        validText
-            .bind(to: descriptionLabel.rx.text)
+        output.validation
+            .drive(nextButton.rx.isEnabled)
             .disposed(by: disposeBag)
         
-        passwordTextField.rx.text.orEmpty
-            .bind(to: viewModel.inputPasswordText)
-            .disposed(by: disposeBag)
-        
-        viewModel.outputValidation
-            .asDriver(onErrorJustReturn: false)
-            .drive(nextButton.rx.isEnabled, descriptionLabel.rx.isHidden)
-            .disposed(by: disposeBag)
-        
-        viewModel.outputValidation
-            .asDriver(onErrorJustReturn: false)
+        output.validation
             .drive(with: self) { owner, value in
                 let color = value ? UIColor.systemPink : UIColor.gray
                 owner.nextButton.backgroundColor = color
             }
             .disposed(by: disposeBag)
-
+        
+        output.description
+            .drive(descriptionLabel.rx.text)
+            .disposed(by: disposeBag)
     }
+    
+//    private func bind() {
+//        nextButton.rx.tap
+//            .bind(to: viewModel.inputNextButtonTapped)
+//            .disposed(by: disposeBag)
+//        
+//        viewModel.outputNextButton
+//            .bind(with: self) { owner, _ in
+//                owner.navigationController?.pushViewController(PhoneViewController(), animated: true)
+//            }
+//            .disposed(by: disposeBag)
+//        
+//        validText
+//            .bind(to: descriptionLabel.rx.text)
+//            .disposed(by: disposeBag)
+//        
+//        passwordTextField.rx.text.orEmpty
+//            .bind(to: viewModel.inputPasswordText)
+//            .disposed(by: disposeBag)
+//        
+//        viewModel.outputValidation
+//            .asDriver(onErrorJustReturn: false)
+//            .drive(nextButton.rx.isEnabled, descriptionLabel.rx.isHidden)
+//            .disposed(by: disposeBag)
+//        
+//        viewModel.outputValidation
+//            .asDriver(onErrorJustReturn: false)
+//            .drive(with: self) { owner, value in
+//                let color = value ? UIColor.systemPink : UIColor.gray
+//                owner.nextButton.backgroundColor = color
+//            }
+//            .disposed(by: disposeBag)
+//
+//    }
 
     func configureLayout() {
         view.addSubview(passwordTextField)

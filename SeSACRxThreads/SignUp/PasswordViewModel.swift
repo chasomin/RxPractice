@@ -10,32 +10,32 @@ import RxSwift
 import RxCocoa
 
 final class PasswordViewModel {
-    private let disposeBag = DisposeBag()
     
-    let inputNextButtonTapped = PublishSubject<Void>()
-    let inputPasswordText = PublishRelay<String>()
-    
-    let outputValidation = PublishRelay<Bool>()
-    
-    let outputNextButton = PublishSubject<Void>()
-    
-
-    init() { transform() }
-    
-    private func transform() {
-        inputNextButtonTapped
-            .bind(with: self) { owner, _ in
-                owner.outputNextButton
-                    .onNext(())
-            }
-            .disposed(by: disposeBag)
-        
-        
-        let validation = inputPasswordText
-            .map { $0.count >= 8 }
-        
-        validation
-            .bind(to: outputValidation)
-            .disposed(by: disposeBag)
+    struct Input {
+        let nextTap: ControlEvent<Void>
+        let password: ControlProperty<String?>
     }
+    
+    struct Output {
+        let nextTap: ControlEvent<Void>
+        let validation: Driver<Bool>
+        let description: Driver<String>
+    }
+    
+    func transform(input: Input) -> Output {
+        let validation = input.password.orEmpty
+            .map {
+                $0.count >= 8
+            }
+            .asDriver(onErrorJustReturn: false)
+        
+        let text = validation
+            .map {
+                $0 ? "" : "8자 이상"
+            }
+            .asDriver()//?
+        
+        return Output(nextTap: input.nextTap, validation: validation, description: text)
+    }
+
 }
