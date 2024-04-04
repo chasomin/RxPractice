@@ -31,49 +31,75 @@ class SignUpViewController: UIViewController {
     }
     
     private func bind() {
-        nextButton.rx.tap
-            .bind(to: viewModel.inputNextButtonTapped)
-            .disposed(by: disposeBag)
+        let input = SignUpViewModel.Input(nextTap: nextButton.rx.tap, email: emailTextField.rx.text, validTap: validationButton.rx.tap)
+        let output = viewModel.transform(input: input)
         
-        viewModel.outputNextButtonTapped
-            .asDriver(onErrorJustReturn: ())
-            .drive(with: self, onNext: { owner, _ in
+        output.nextTap
+            .bind(with: self) { owner, _ in
                 owner.navigationController?.pushViewController(PasswordViewController(), animated: true)
-            })
-            .disposed(by: disposeBag)
-        
-        
-        emailTextField.rx.text.orEmpty
-            .bind(to: viewModel.inputEmailText)
-            .disposed(by: disposeBag)
-        
-        viewModel.outputValidText
-            .asDriver(onErrorJustReturn: "")
-            .drive(with: self) { owner, value in
-                owner.nextButton.setTitle(value, for: .normal)
             }
             .disposed(by: disposeBag)
         
-        viewModel.outputValidStatus
-            .asDriver(onErrorJustReturn: false)
+        output.validStatus
+            .drive(nextButton.rx.isEnabled)
+            .disposed(by: disposeBag)
+        
+        output.validStatus
             .drive(with: self) { owner, value in
-                let color = value ? UIColor.systemBlue : UIColor.gray
+                let color = value ? UIColor.systemPink : UIColor.gray
                 owner.nextButton.backgroundColor = color
             }
             .disposed(by: disposeBag)
         
-        viewModel.availableEmail
-            .bind(to: nextButton.rx.isEnabled)
-            .disposed(by: disposeBag)
-
-        validationButton.rx.tap
-            .bind(to: viewModel.inputValidationButtonTapped)
-            .disposed(by: disposeBag)
-        
-        viewModel.outputAllValidation
-            .bind(to: nextButton.rx.isEnabled)
+        output.validText
+            .drive(nextButton.rx.title())
             .disposed(by: disposeBag)
     }
+    
+//    private func bind() {
+//        nextButton.rx.tap
+//            .bind(to: viewModel.inputNextButtonTapped)
+//            .disposed(by: disposeBag)
+//        
+//        viewModel.outputNextButtonTapped
+//            .asDriver(onErrorJustReturn: ())
+//            .drive(with: self, onNext: { owner, _ in
+//                owner.navigationController?.pushViewController(PasswordViewController(), animated: true)
+//            })
+//            .disposed(by: disposeBag)
+//        
+//        
+//        emailTextField.rx.text.orEmpty
+//            .bind(to: viewModel.inputEmailText)
+//            .disposed(by: disposeBag)
+//        
+//        viewModel.outputValidText
+//            .asDriver(onErrorJustReturn: "")
+//            .drive(with: self) { owner, value in
+//                owner.nextButton.setTitle(value, for: .normal)
+//            }
+//            .disposed(by: disposeBag)
+//        
+//        viewModel.outputValidStatus
+//            .asDriver(onErrorJustReturn: false)
+//            .drive(with: self) { owner, value in
+//                let color = value ? UIColor.systemBlue : UIColor.gray
+//                owner.nextButton.backgroundColor = color
+//            }
+//            .disposed(by: disposeBag)
+//        
+//        viewModel.availableEmail
+//            .bind(to: nextButton.rx.isEnabled)
+//            .disposed(by: disposeBag)
+//
+//        validationButton.rx.tap
+//            .bind(to: viewModel.inputValidationButtonTapped)
+//            .disposed(by: disposeBag)
+//        
+//        viewModel.outputAllValidation
+//            .bind(to: nextButton.rx.isEnabled)
+//            .disposed(by: disposeBag)
+//    }
         
     func configure() {
         validationButton.setTitle("중복확인", for: .normal)
