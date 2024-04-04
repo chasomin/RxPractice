@@ -70,11 +70,11 @@ class NicknameViewController: UIViewController {
             .disposed(by: disposeBag)
         
         output.validation
-            .bind(to: nextButton.rx.isEnabled)
+            .drive(nextButton.rx.isEnabled)
             .disposed(by: disposeBag)
         
         output.validation
-            .bind(with: self) { owner, value in
+            .drive(with: self) { owner, value in
                 let color = value ? UIColor.systemPink : UIColor.gray
                 owner.nextButton.backgroundColor = color
                 let text = value ? "다음" : "3글자 이상 입력해주세요"

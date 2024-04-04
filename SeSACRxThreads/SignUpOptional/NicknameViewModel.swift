@@ -26,7 +26,7 @@ final class NicknameViewModel {
     struct Output {
         let tap: ControlEvent<Void>
         let text: Driver<String>
-        let validation: Observable<Bool>
+        let validation: Driver<Bool>
     }
     
     func transform(input: Input) -> Output {
@@ -42,7 +42,7 @@ final class NicknameViewModel {
 //            .bind(to: outputValidation)
 //            .disposed(by: disposeBag)
         
-        let validation = input.text.orEmpty.map { $0.count > 2 }
+        let validation = input.text.orEmpty.map { $0.count > 2 }.asDriver(onErrorJustReturn: false)
         let validationText = BehaviorRelay(value: "3자 이상").asDriver()
             
         return Output(tap: input.tap, text: validationText, validation: validation)
